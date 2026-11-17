@@ -1,0 +1,1 @@
+export const BUDGET_ALERT_THRESHOLD = 90;
