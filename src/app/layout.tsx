@@ -3,6 +3,7 @@ import "./globals.css";
 import { ExpenseModalProvider } from "@/context/ExpenseModalContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { SettingsProvider } from "@/context/SettingsContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export const metadata = {
   title: "Home Finance",
@@ -14,13 +15,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <>
       <html lang="pt-BR">
         <body className="font-sans antialiased">
-          <AuthProvider>
-            <SettingsProvider>
-              <ToastProvider>
-                <ExpenseModalProvider>{children}</ExpenseModalProvider>
-              </ToastProvider>
-            </SettingsProvider>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <SettingsProvider>
+                <ToastProvider>
+                  <ExpenseModalProvider>{children}</ExpenseModalProvider>
+                </ToastProvider>
+              </SettingsProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </body>
       </html>
     </>

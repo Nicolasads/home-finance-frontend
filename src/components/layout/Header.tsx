@@ -5,7 +5,7 @@ import { type ChangeEvent } from "react";
 import { NotificationsMenu } from "./NotificationsMenu";
 import { useExpenses } from "@/hooks/useExpenses";
 import { useExpenseModal } from "@/hooks/useExpenseModal";
-import { buildPeriodOtions } from "@/utils/periodOptions";
+import { buildPeriodOptions } from "@/utils/periodOptions";
 import { ThemeToggle } from "../ui/ThemeToggle";
 
 interface HeaderProps {
@@ -13,7 +13,7 @@ interface HeaderProps {
   title: string;
 }
 
-const PERIOD_OPTIONS = buildPeriodOtions();
+const PERIOD_OPTIONS = buildPeriodOptions(new Date());
 
 export function Header({ onMenuClick, title }: HeaderProps) {
   const { selectedMonth, setSelectedMonth } = useExpenses();

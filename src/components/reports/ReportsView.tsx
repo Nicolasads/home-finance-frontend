@@ -1,46 +1,63 @@
 "use client";
 
-import { Download } from "lucide-react";
-import Button from "@/components/ui/Button";
-import { useReportData } from "@/hooks/useReportData";
+import { useReportAnalytics } from "@/hooks/useReportAnalytics";
 import { useToast } from "@/hooks/useToast";
-import { ReportInsights } from "./ReportInsights";
-import { ReportSummaryCards } from "./ReportSummaryCards";
+import { formatPeriodLabel } from "@/utils/periodOptions";
+import { ReportFilters } from "./ReportFilters";
+import { ReportKpiCards } from "./ReportKpiCards";
+import { TrendChart } from "./TrendChart";
+import { RecurrenceDonut } from "./RecurrenceDonut";
+import { CategoryComparisonChart } from "./CategoryComparisonChart";
+import { VariationHighlights } from "./VariationHighlights";
+import { CategoryBreakdownTable } from "./CategoryBreakdownTable";
+import { CategoryDrawer } from "./CategoryDrawer";
 
 export function ReportsView() {
-  const data = useReportData();
+  const report = useReportAnalytics();
   const { showToast } = useToast();
 
   return (
-    <section className="space-y-8 rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <header className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-            Relatório financeiro
-          </h3>
-          <p className="text-xs text-slate-500">
-            Gastos, variações e alertas do mês selecionado
-          </p>
+    <div className="space-y-6">
+      <ReportFilters
+        filters={report.filters}
+        onChange={report.update}
+        onReset={report.reset}
+        onExport={() =>
+          showToast("Exportação em CSV disponível em breve.", "info")
+        }
+      />
+
+      <ReportKpiCards report={report} />
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <TrendChart data={report.semesterTrend} />
         </div>
-        <Button
-          variant="secondary"
-          onClick={() =>
-            showToast("Exportação em PDF ainda não disponível.", "info")
-          }
-        >
-          <Download className="mr-2 inline h-4 w-4" />
-          Exportar PDF
-        </Button>
-      </header>
-
-      <ReportSummaryCards data={data} />
-
-      <div>
-        <h4 className="mb-4 text-sm font-bold text-slate-900 dark:text-white">
-          Alertas e recomendações
-        </h4>
-        <ReportInsights insights={data.insights} />
+        <div className="lg:col-span-5">
+          <RecurrenceDonut
+            slices={report.recurrenceSlices}
+            total={report.totalPeriod}
+          />
+        </div>
       </div>
-    </section>
+
+      <CategoryComparisonChart
+        rows={report.breakdown}
+        baseLabel={formatPeriodLabel(report.filters.baseMonth)}
+        compareLabel={formatPeriodLabel(report.filters.compareMonth)}
+      />
+
+      <VariationHighlights rows={report.breakdown} />
+
+      <CategoryBreakdownTable
+        rows={report.breakdown}
+        onInspect={report.setDrillCategoryId}
+      />
+
+      <CategoryDrawer
+        category={report.drillCategory}
+        onClose={() => report.setDrillCategoryId(null)}
+      />
+    </div>
   );
 }

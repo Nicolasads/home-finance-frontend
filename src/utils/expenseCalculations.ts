@@ -3,7 +3,7 @@ import { toIsoDate } from "./formatters";
 import { Expense } from "@/types/expense";
 import { CategoryDto } from "@/types/category";
 
-export const getMonthKey = (date: Date) =>
+export const getMonthKey = (date: Date): string =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
 export const getPreviousMonth = (monthKey: string) => {
