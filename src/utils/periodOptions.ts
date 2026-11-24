@@ -13,9 +13,7 @@ export const formatPeriodLabel = (monthKey: string): string => {
   return label.charAt(0).toUpperCase() + label.slice(1).replace(" de ", " de ");
 };
 
-export const buildPeriodOtions = (
-  baseDate: Date = new Date(),
-): PeriodOption[] => {
+export const buildPeriodOptions = (baseDate: Date): PeriodOption[] => {
   const options: PeriodOption[] = [];
   let cursor = getMonthKey(baseDate);
 
